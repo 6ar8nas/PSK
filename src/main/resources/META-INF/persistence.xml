@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
-	<persistence-unit name="LabWorkPersistenceUnit">
-		<jta-data-source>LabWorkDataSource</jta-data-source>
+	<persistence-unit name="RecipePersistenceUnit">
+		<jta-data-source>RecipeDataSource</jta-data-source>
 		<properties>
 			<property name="hibernate.show_sql" value="true"/>
 			<property name="hibernate.hbm2ddl.auto" value="update"/>
