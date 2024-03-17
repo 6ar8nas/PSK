@@ -6,7 +6,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.UUID;
 
 @ApplicationScoped
 public class TagDAO implements GenericDAO<Tag> {
@@ -18,7 +17,7 @@ public class TagDAO implements GenericDAO<Tag> {
 		return em.createNamedQuery("Tag.findAll", Tag.class).getResultList();
 	}
 
-	public Tag findById(UUID id) {
+	public Tag findById(Long id) {
 		return em.find(Tag.class, id);
 	}
 

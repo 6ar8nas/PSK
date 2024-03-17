@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+<h:head>
+	<head>
+		<title>Tag</title>
+	</head>
+	<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        p {
+            color: #494949;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #575757;
+        }
+
+        h2 {
+            color: #414141;
+        }
+
+        .recipe-link {
+            display: block;
+            color: rgba(64, 49, 49, 0.71);
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+
+        .recipe-link:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+	</style>
+</h:head>
+<h:body>
+	<h1>Tag '#{singleTag.tag.name}'</h1>
+	<h2>Recipes</h2>
+	<ol>
+		<ui:repeat value="#{singleTag.tag.recipes}" var="recipe">
+			<li><h:link value="#{recipe.name} | #{recipe.description}" outcome="recipe?recipeId=#{recipe.id}"
+			            styleClass="recipe-link"/></li>
+		</ui:repeat>
+	</ol>
+	<hr/>
+	<h:link value="Back to home screen" outcome="/index"/>
+</h:body>
+</html>

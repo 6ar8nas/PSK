@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @NamedQueries({
 		@NamedQuery(name = "Tag.findAll", query = "select t from Tag as t")
@@ -18,16 +17,20 @@ import java.util.UUID;
 @Getter
 @EqualsAndHashCode
 @Entity
+@Table(uniqueConstraints = {
+		@UniqueConstraint(columnNames = {"name"})
+})
 public class Tag implements Serializable {
 	@GeneratedValue
 	@Id
-	private UUID id;
+	private Long id;
 
 	@Size(max = 15)
+	@Size(min = 1)
 	@Basic(optional = false)
 	private String name;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "tag", fetch = FetchType.LAZY)
 	private List<Recipe> recipes = new ArrayList<>();
 
 	public Tag() {

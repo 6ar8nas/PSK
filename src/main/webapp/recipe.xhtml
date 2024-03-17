@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<h:head>
+	<head>
+		<title>Recipe</title>
+	</head>
+	<style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            color: #575757;
+            margin-top: 20px;
+        }
+
+        h2 {
+            color: #414141;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #1a1a1a;
+            margin-block-end: 10px;
+        }
+
+        p {
+            color: #494949;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #5e6e93;
+            color: #fff;
+        }
+
+        td {
+            background-color: #fff;
+            color: #212529;
+        }
+
+        th:first-child,
+        td:first-child {
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+
+        th:last-child,
+        td:last-child {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        input, textarea {
+            margin-inline: 10px;
+        }
+
+        .link {
+            text-decoration: none;
+            color: black;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+	</style>
+</h:head>
+<h:body>
+	<h1>Recipe for '${singleRecipe.recipe.name}'</h1>
+	<h:dataTable value="#{singleRecipe.recipe}" var="recipe">
+		<h:column>
+			<f:facet name="header">Instructions</f:facet>
+			<h:outputText value="#{recipe.instructions}"/>
+		</h:column>
+		<h:column>
+			<f:facet name="header">Ingredients</f:facet>
+			<h:dataTable value="#{recipe.ingredients}" var="ingredient">
+				<h:column>
+					<h:link value="#{ingredient.name} (#{ingredient.category.name()})"
+					        outcome="ingredient?ingredientId=#{ingredient.id}" styleClass="link"/>
+				</h:column>
+			</h:dataTable>
+		</h:column>
+		<h:column>
+			<f:facet name="header">Tag</f:facet>
+			<h:link value="#{recipe.tag.name}" outcome="tag?tagId=#{recipe.tag.id}" styleClass="link"/>
+		</h:column>
+		<h:column>
+			<f:facet name="header">Description</f:facet>
+			<h:outputText value="#{recipe.description}"/>
+		</h:column>
+		<h:column>
+			<f:facet name="header">Creation date</f:facet>
+			<h:outputText value="#{recipe.creationDate}">
+				<f:convertDateTime timeStyle="short" type="localDateTime"/>
+			</h:outputText>
+		</h:column>
+		<h:column>
+			<f:facet name="header">Preparation time</f:facet>
+			<h:outputText value="#{recipeTimeEstimator.getTimeEstimationStatus(recipe.id)}"/>
+			<h:form>
+				<h:button value="Update" outcome="#{recipeTimeEstimator.refreshStatus(recipe.id)}">
+				</h:button>
+				<h:commandButton value="Estimate preparation time"
+				                 action="#{recipeTimeEstimator.estimatePreparationTime(recipe.id)}">
+					<f:param name="recipeId" value="#{recipe.id}"/>
+				</h:commandButton>
+			</h:form>
+		</h:column>
+	</h:dataTable>
+	<hr/>
+	<h:link value="Back to home screen" outcome="/index"/>
+</h:body>
+</html>

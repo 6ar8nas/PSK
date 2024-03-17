@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @NamedQueries({
 		@NamedQuery(name = "Ingredient.findAll", query = "select i from Ingredient as i")
@@ -17,19 +17,23 @@ import java.util.UUID;
 @Getter
 @EqualsAndHashCode
 @Entity
+@Table(uniqueConstraints = {
+		@UniqueConstraint(columnNames = {"name"})
+})
 public class Ingredient implements Serializable {
 	@GeneratedValue
 	@Id
-	private UUID id;
+	private Long id;
 
+	@Size(min = 1)
 	@Basic(optional = false)
 	private String name;
 
 	@Basic
 	private IngredientCategory category;
 
-	@OneToMany(mappedBy = "ingredient", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+	@ManyToMany(mappedBy = "ingredients", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Recipe> recipes = new ArrayList<>();
 
 	public Ingredient() {
 	}

@@ -1,10 +1,9 @@
 package mif.vu.sarunas.labwork.persistence;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface GenericDAO<T> {
-	T findById(UUID id);
+	T findById(Long id);
 
 	List<T> findAll();
 

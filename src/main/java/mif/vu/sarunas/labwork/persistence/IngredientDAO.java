@@ -6,7 +6,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.UUID;
 
 @ApplicationScoped
 public class IngredientDAO implements GenericDAO<Ingredient> {
@@ -18,10 +17,10 @@ public class IngredientDAO implements GenericDAO<Ingredient> {
 		return em.createNamedQuery("Ingredient.findAll", Ingredient.class).getResultList();
 	}
 
-	public Ingredient findById(UUID id) {
+	public Ingredient findById(Long id) {
 		return em.find(Ingredient.class, id);
 	}
-
+	
 	public void save(Ingredient ingredient) {
 		em.persist(ingredient);
 	}

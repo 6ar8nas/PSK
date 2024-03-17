@@ -5,15 +5,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @NamedQueries({
-		@NamedQuery(name = "Recipe.findAll", query = "select r from Recipe as r")
+		@NamedQuery(name = "Recipe.findAll", query = "select r from Recipe as r"),
+		@NamedQuery(name = "Recipe.findAllByFilters", query = "SELECT r FROM Recipe r JOIN r.ingredients i WHERE (r.tag.id = :tagId and i.id IN :ingredientIds) GROUP BY r HAVING COUNT(DISTINCT i) = :ingredientCount"),
+		@NamedQuery(name = "Recipe.findAllByIngredients", query = "SELECT r FROM Recipe r JOIN r.ingredients i WHERE i.id IN :ingredientIds GROUP BY r HAVING COUNT(DISTINCT i) = :ingredientCount"),
+		@NamedQuery(name = "Recipe.findAllByTag", query = "select r from Recipe as r where r.tag.id = :tagId"),
 })
 @Setter
 @Getter
@@ -22,8 +24,9 @@ import java.util.UUID;
 public class Recipe implements Serializable {
 	@GeneratedValue
 	@Id
-	private UUID id;
+	private Long id;
 
+	@Size(min = 1)
 	@Basic(optional = false)
 	private String name;
 
@@ -33,19 +36,15 @@ public class Recipe implements Serializable {
 	@Basic(optional = false)
 	private String instructions;
 
-	@Basic
-	@Column(name = "PREPARATION_TIME")
-	private LocalTime preparationTime;
-
 	@Basic(optional = false)
 	@Column(name = "CREATION_DATE")
 	private LocalDateTime creationDate = LocalDateTime.now();
 
-	@OneToMany(mappedBy = "recipe", orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<RecipeIngredient> ingredients = new ArrayList<>();
+	@ManyToMany
+	private List<Ingredient> ingredients = new ArrayList<>();
 
-	@ManyToMany(mappedBy = "recipes", fetch = FetchType.LAZY)
-	private List<Tag> tags = new ArrayList<>();
+	@ManyToOne(optional = false)
+	private Tag tag;
 
 	public Recipe() {
 	}

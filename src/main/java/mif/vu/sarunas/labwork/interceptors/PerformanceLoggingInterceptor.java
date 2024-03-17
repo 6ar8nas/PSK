@@ -3,10 +3,11 @@ package mif.vu.sarunas.labwork.interceptors;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import java.io.Serializable;
 
 @Interceptor
 @LogPerformance
-public class PerformanceLoggingInterceptor {
+public class PerformanceLoggingInterceptor implements Serializable {
 	@AroundInvoke
 	public Object logPerformance(InvocationContext context) throws Exception {
 		long startTime = System.currentTimeMillis();

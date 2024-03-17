@@ -5,8 +5,8 @@ import mif.vu.sarunas.labwork.entities.Recipe;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.UUID;
 
 @ApplicationScoped
 public class RecipeDAO implements GenericDAO<Recipe> {
@@ -18,8 +18,29 @@ public class RecipeDAO implements GenericDAO<Recipe> {
 		return em.createNamedQuery("Recipe.findAll", Recipe.class).getResultList();
 	}
 
-	public Recipe findById(UUID id) {
+	public Recipe findById(Long id) {
 		return em.find(Recipe.class, id);
+	}
+
+	public List<Recipe> findAllByFilters(List<Long> ingredientIds, Long tagId) {
+		if (ingredientIds.isEmpty() && tagId == null) return findAll();
+
+		TypedQuery<Recipe> query;
+		if (!ingredientIds.isEmpty() && tagId != null) {
+			query = em.createNamedQuery("Recipe.findAllByFilters", Recipe.class);
+			query.setParameter("tagId", tagId);
+			query.setParameter("ingredientIds", ingredientIds);
+			query.setParameter("ingredientCount", (long) ingredientIds.size());
+		} else if (!ingredientIds.isEmpty()) {
+			query = em.createNamedQuery("Recipe.findAllByIngredients", Recipe.class);
+			query.setParameter("ingredientIds", ingredientIds);
+			query.setParameter("ingredientCount", (long) ingredientIds.size());
+		} else {
+			query = em.createNamedQuery("Recipe.findAllByTag", Recipe.class);
+			query.setParameter("tagId", tagId);
+		}
+
+		return query.getResultList();
 	}
 
 	public void save(Recipe recipe) {
