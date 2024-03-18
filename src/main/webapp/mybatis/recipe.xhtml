@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<h:head>
+	<head>
+		<title>Recipe</title>
+	</head>
+	<style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            color: #575757;
+            margin-top: 20px;
+        }
+
+        h2 {
+            color: #414141;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #1a1a1a;
+            margin-block-end: 10px;
+        }
+
+        p {
+            color: #494949;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #5e6e93;
+            color: #fff;
+        }
+
+        td {
+            background-color: #fff;
+            color: #212529;
+        }
+
+        th:first-child,
+        td:first-child {
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+
+        th:last-child,
+        td:last-child {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        input, textarea {
+            margin-inline: 10px;
+        }
+
+	</style>
+</h:head>
+<h:body>
+	<h1>Recipe for '${singleRecipeMyBatis.recipe.name}'</h1>
+	<h:dataTable value="#{singleRecipeMyBatis.recipe}" var="recipe">
+		<h:column>
+			<f:facet name="header">Instructions</f:facet>
+			<h:outputText value="#{recipe.instructions}"/>
+		</h:column>
+		<h:column>
+			<f:facet name="header">Ingredients</f:facet>
+			<h:dataTable value="#{singleRecipeMyBatis.ingredients}" var="ingredient">
+				<h:column>
+					<h:outputText
+							value="#{ingredient.name} (#{singleRecipeMyBatis.convertCategoryToString(ingredient.category)})"/>
+				</h:column>
+			</h:dataTable>
+		</h:column>
+		<h:column>
+			<f:facet name="header">Tag</f:facet>
+			<h:outputText value="#{singleRecipeMyBatis.tag.name}"/>
+		</h:column>
+		<h:column>
+			<f:facet name="header">Description</f:facet>
+			<h:outputText value="#{recipe.description}"/>
+		</h:column>
+		<h:column>
+			<f:facet name="header">Creation date</f:facet>
+			<h:outputText value="#{recipe.creationDate}">
+				<f:convertDateTime timeStyle="short" type="date"/>
+			</h:outputText>
+		</h:column>
+		<h:column>
+			<f:facet name="header">Preparation time</f:facet>
+			<h:outputText value="#{recipeTimeEstimatorMyBatis.getTimeEstimationStatus(recipe.id)}"/>
+			<h:form>
+				<h:button value="Update" outcome="#{recipeTimeEstimatorMyBatis.refreshStatus(recipe.id)}">
+				</h:button>
+				<h:commandButton value="Estimate preparation time"
+				                 action="#{recipeTimeEstimatorMyBatis.estimatePreparationTime(recipe.id)}">
+					<f:param name="recipeId" value="#{recipe.id}"/>
+				</h:commandButton>
+			</h:form>
+		</h:column>
+	</h:dataTable>
+	<hr/>
+	<h:link value="Back to home screen" outcome="/mybatis/index"/>
+</h:body>
+</html>

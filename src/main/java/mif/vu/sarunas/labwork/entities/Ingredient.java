@@ -21,7 +21,7 @@ import java.util.List;
 		@UniqueConstraint(columnNames = {"name"})
 })
 public class Ingredient implements Serializable {
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Long id;
 

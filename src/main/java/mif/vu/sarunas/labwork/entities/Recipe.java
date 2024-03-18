@@ -22,7 +22,7 @@ import java.util.List;
 @EqualsAndHashCode
 @Entity
 public class Recipe implements Serializable {
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Long id;
 

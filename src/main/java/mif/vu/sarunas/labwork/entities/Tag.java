@@ -21,7 +21,7 @@ import java.util.List;
 		@UniqueConstraint(columnNames = {"name"})
 })
 public class Tag implements Serializable {
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Long id;
 

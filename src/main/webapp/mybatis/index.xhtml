@@ -79,46 +79,40 @@
 </h:head>
 <h:body>
 	<h1>Recipe book</h1>
-	<h5><h:link value="myBatis" outcome="/mybatis/index"/></h5>
+	<h5><h:link value="ORM" outcome="/index"/></h5>
 	<h:panelGroup styleClass="main-content">
 		<h2>Want to share your ideas with others?
 			<h:link styleClass="create-recipe-link" value="Create a new recipe!" outcome="create-recipe"/>
 		</h2>
 		<h2>Want to cook something new?</h2>
-		<ui:fragment rendered="#{not empty recipes.recipes}">
+		<ui:fragment rendered="#{not empty recipesMyBatis.recipes}">
 			<ol>
-				<ui:repeat value="#{recipes.recipes}" var="recipe">
+				<ui:repeat value="#{recipesMyBatis.recipes}" var="recipe">
 					<li>
-						<h:link value="#{recipe.name} | #{recipe.tag.name}" outcome="recipe?recipeId=#{recipe.id}"
+						<h:link value="#{recipe.name}" outcome="/mybatis/recipe?recipeId=#{recipe.id}"
 						        styleClass="recipe-link"/>
 					</li>
 				</ui:repeat>
 			</ol>
 		</ui:fragment>
 		<ui:fragment
-				rendered="#{empty recipes.recipes and empty recipes.tagFilter and empty recipes.ingredientFilters}">
+				rendered="#{empty recipesMyBatis.recipes and empty recipesMyBatis.tagFilter}">
 			<p>Unfortunately, no recipes have been yet created. Go ahead and add yours!</p>
 		</ui:fragment>
 		<ui:fragment
-				rendered="#{empty recipes.recipes and (not empty recipes.tagFilter or not empty recipes.ingredientFilters)}">
+				rendered="#{empty recipesMyBatis.recipes and not empty recipesMyBatis.tagFilter}">
 			<p>There were no recipes matching your filtering criteria found. Perhaps you have one to help us?</p>
 		</ui:fragment>
 	</h:panelGroup>
 	<h:panelGroup styleClass="aside-content">
 		<h:form>
-			<h3>Filter recipes by an ingredient</h3>
-			<h:selectManyCheckbox value="#{recipes.ingredientFilters}" layout="pageDirection">
-				<f:selectItems value="#{ingredients.allIngredients}" var="ingredient" itemLabel="#{ingredient.name}"
-				               itemValue="#{ingredient.id}"/>
-			</h:selectManyCheckbox>
-
 			<h3>Filter recipes by a tag</h3>
-			<h:selectOneMenu value="#{recipes.tagFilter}" layout="pageDirection">
+			<h:selectOneMenu value="#{recipesMyBatis.tagFilter}" layout="pageDirection">
 				<f:selectItem itemValue="#{null}" itemLabel="None" noSelectionOption="true"/>
-				<f:selectItems value="#{tags.allTags}" var="tag" itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
+				<f:selectItems value="#{tagsMyBatis.allTags}" var="tag" itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
 			</h:selectOneMenu>
 			<hr/>
-			<h:commandButton value="Apply Filter" action="#{recipes.filterRecipes}"/>
+			<h:commandButton value="Apply Filter" action="#{recipesMyBatis.filterRecipes}"/>
 		</h:form>
 	</h:panelGroup>
 </h:body>
